@@ -1,0 +1,10 @@
+---
+
+- name: Retrieve IP Prefixes
+  uri:
+    url: http://172.18.131.158/api/ipam/prefixes/
+    method: GET
+    user: cits
+    password: VhWTJ8uhRLBwiXZa
+    headers:
+            Content-Type: "application/json"

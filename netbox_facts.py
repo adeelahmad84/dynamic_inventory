@@ -7,7 +7,7 @@ ANSIBLE_METADATA = {'version': '1.0',
 
 DOCUMENTATION = """
 ---
-module: netbox_ipam
+module: netbox_facts
 short description: Manage the IPAM aspect of Netbox
 description:
     - Add/remove prefixes
@@ -70,6 +70,7 @@ updates:
     sample: 'doodoo'
 """
 
+import re
 import unittest
 
 try:
@@ -81,13 +82,19 @@ try:
     import requests
     from requests.packages.urllib3.exceptions import InsecureRequestWarning
     imported = True
-except:
+except ImportError:
     imported = False
 
 from module_utils.basic import AnsibleModule
-from ansible.module_utils.basic import get_exception
+from module_utils.basic import get_exception
+from module_utils.six import iteritems
+from module_utils.urls import SSLValidationError
+from module_utils.urls import url_argument_spec
+from module_utils.urls import fetch_url
 
-url = 'http://$NETBOX_URL/api/dcim/device-types/'
+server_name = 'https://netbox.example.com'
+api_endpoint = '/api/ipam/prefixes/'
+headers = {'Content-Type':'application/json'}
 header_update = {'Authorization': 'Token 83d60a94dadc64789c1490c65ab4b99aa8abc322'}
 
 def api_request(method, url, data=None):
@@ -122,12 +129,19 @@ def main():
     This module will liaise the Fresh Service Desk API.
     """
     module = AnsibleModule(
-            argument_spec = dict(
-                state     = dict(default='present', choices=['present', 'absent']),
-                name      = dict(required=True),
-                enabled   = dict(required=True, type='bool'),
-                something = dict(aliases=['whatever'])),
-            supports_check_mode=False)
+        argument_spec=dict(
+            application=dict(required=True, \
+                                  choices=['circuit', 'dcim', 'extras', \
+                                           'ipam', 'secrets', 'tenancy']),
+            endpoint=dict(required=True, type='str'),
+            endpoint_id=dict(required=False)
+            ),
+        supports_check_mode=False
+    )
+
+    application = module.params['application']
+    endpoint        = module.params['endpoint']
+    endpoint_id     = module.params['endpoint_id']
 
     if not imported:
         module.fail_json(msg='Failed to import required packages')
