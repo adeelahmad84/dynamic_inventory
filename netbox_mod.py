@@ -1,0 +1,145 @@
+#!/usr/bin/env python
+# -- coding: utf-8 --
+
+ANSIBLE_METADATA = {'version': '1.0',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+
+DOCUMENTATION = """
+---
+module: netbox_ipam
+short description: Manage the IPAM aspect of Netbox
+description:
+    - Add/remove prefixes
+    - Validating Prefixes with interfaces
+    - Allocating next available IP Range
+version_added: "0.1"
+author: Adeel Ahmad (@adeelahmad84)
+options:
+    first_option:
+        description:
+            - Description of the options goes here.
+            - Must be written in sentences.
+        required: true or false
+        default: string value or the word null
+        choices:
+            - enable
+            - disable
+        aliases:
+            - repo_name
+        version_added: "0.1"
+    second_option:
+        description:
+            - Description of the options goes here.
+            - Must be written in sentences.
+        required: true or false
+        default: string value or the word null
+        choices:
+            - enable
+            - disable
+        aliases:
+            - repo_name
+        version_added: "0.1"
+    third_option:
+        description:
+            - Description of the options goes here.
+            - Must be written in sentences.
+        required: true or false
+        default: string value or the word null
+        choices:
+            - enable
+            - disable
+        aliases:
+            - repo_name
+        version_added: "0.1"
+"""
+
+EXAMPLES = """
+- name: Allocate Loopback IP
+  netbox_ipam:
+      type: 'loopback'
+      host: {{ inventory_hostname }}
+"""
+
+
+RETURN = """
+updates:
+    description: first description
+    returned: success
+    type: string
+    sample: 'doodoo'
+"""
+
+import unittest
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
+try:
+    import requests
+    from requests.packages.urllib3.exceptions import InsecureRequestWarning
+    imported = True
+except:
+    imported = False
+
+from module_utils.basic import AnsibleModule
+from ansible.module_utils.basic import get_exception
+
+url = 'http://$NETBOX_URL/api/dcim/device-types/'
+header_update = {'Authorization': 'Token 83d60a94dadc64789c1490c65ab4b99aa8abc322'}
+
+def api_request(method, url, data=None):
+    if method == 'GET':
+        try:
+            r = requests.get(url)
+        except:
+            return False
+    elif method == 'POST':
+        try:
+            r = requests.post(url, data=data)
+        except:
+            return False
+    elif method == 'DELETE':
+        try:
+            r = requests.delete(url)
+        except:
+            return False
+    else:
+        return False
+    if r.status_code != requests.codes.ok:
+        return False
+    else:
+        json = r.json()
+        if 'error' in json:
+            return False
+        else:
+            return json
+
+def main():
+    """
+    This module will liaise the Fresh Service Desk API.
+    """
+    module = AnsibleModule(
+            argument_spec = dict(
+                state     = dict(default='present', choices=['present', 'absent']),
+                name      = dict(required=True),
+                enabled   = dict(required=True, type='bool'),
+                something = dict(aliases=['whatever'])),
+            supports_check_mode=False)
+
+    if not imported:
+        module.fail_json(msg='Failed to import required packages')
+
+    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+
+
+if __name__ == '__main__':
+    main()
+    import doctest
+    doctest.testmod()
+    class MyTest(unittest.TestCase):
+        def test(self):
+            self.assertEqual(main(), )
