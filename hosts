@@ -1,0 +1,14 @@
+[local]
+localhost asnible_connection=loacl
+
+[arista]
+pynet-sw1 eapi_port=8243
+pynet-sw2 eapi_port=8343
+pynet-sw3 eapi_port=8443
+pynet-sw4 eapi_port=8543
+
+[arista:vars]
+ansible_connection=local
+eapi_hostname=10.10.10.227
+eapi_username=admin1
+eapi_password=password
