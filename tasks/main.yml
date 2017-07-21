@@ -7,4 +7,5 @@
     user: cits
     password: VhWTJ8uhRLBwiXZa
     headers:
-            Content-Type: "application/json"
+      Content-Type: "application/json"
+      Authorization: "Token 83d60a94dadc64789c1490c65ab4b99aa8abc322"
