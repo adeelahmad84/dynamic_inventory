@@ -74,3 +74,7 @@ AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
 # Use ldaps:// because it is mo'betta
 AUTH_LDAP_START_TLS = True
 
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend'
+    'django.contrib.auth.backends.ModelBackend'
+)
