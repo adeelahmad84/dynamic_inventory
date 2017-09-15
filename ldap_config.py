@@ -25,7 +25,7 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
 
 # Set the DN and password for the NetBox service account.
 AUTH_LDAP_BIND_DN = "CN=Netbox IPAM,CN=Managed Service Accounts,DC=lab,DC=example,DC=com"
-AUTH_LDAP_BIND_PASSWORD = "Wlos@n3!"
+AUTH_LDAP_BIND_PASSWORD = "PASSWORD"
 
 # Include this setting if you want to ignore certificate errors. This might be
 # needed to accept a self-signed cert.
