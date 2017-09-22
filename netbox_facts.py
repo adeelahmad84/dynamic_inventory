@@ -95,7 +95,7 @@ from module_utils.urls import fetch_url
 server_name = 'https://netbox.example.com'
 api_endpoint = '/api/ipam/prefixes/'
 headers = {'Content-Type':'application/json'}
-header_update = {'Authorization': 'Token 83d60a94dadc64789c1490c65ab4b99aa8abc322'}
+header_update = {'Authorization': 'Token ddbc322'}
 
 def api_request(method, url, data=None):
     if method == 'GET':
